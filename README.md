@@ -5,3 +5,5 @@ Nhiệm vụ của các thành viên:
 Nguyễn Hồng Thức: Đưa code lên git Viết script cho các test case (KiemTraLoiEmailKhongTonTai, KiemTraLoiDeTrongFileName,KiemTraFomatEmail,testLoginLongCredentials, KiemTraLoginVoiPhone);
 
 Nguyễn Lê Triều Vỹ: Viết script cho các test case(KiemTraDangNhapThanhCong, KiemTraLoiPassWord)
+
+script test nằm trong thư mục test/java/org/example
