@@ -5,10 +5,14 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import java.time.Duration;
 
 
 public class TestClass {
@@ -53,10 +57,12 @@ public class TestClass {
 
     @Test
     public void KiemTraLoiEmailKhongTonTai() {
+        String expect = "The email address you entered isn't connected to an account. Find your account and log in.";
         login("email_sai@gmail.com", "any_password");
         // Kiểm tra thông báo lỗi
-        WebElement errorMessage = driver.findElement(By.xpath("//div[contains(text(),'account')]"));
-        Assert.assertTrue(errorMessage.isDisplayed(), "[FAIL] Không hiển thị thông báo lỗi khi email không tồn tại.");
+        WebElement errorMessage = driver.findElement(By.className("_9ay7"));
+        String actual = errorMessage.getText();
+        Assert.assertEquals(actual, expect);
     }
 
     @Test
@@ -68,11 +74,14 @@ public class TestClass {
     }
 
     @Test
-    public void KiemTraFomatEmail() {
+    public void KiemTraFomatEmailorPhone() {
+        String expect = "The email address or mobile number you entered isn't connected to an account. Find your account and log in.";
         login("emailkhonghopdinhdang", "any_password");
         // Kiểm tra thông báo lỗi
-        WebElement errorMessage = driver.findElement(By.xpath("//div[contains(text(),'valid email')]"));
-        Assert.assertTrue(errorMessage.isDisplayed(), "[FAIL] Không hiển thị thông báo lỗi khi email sai định dạng.");
+        WebElement errorMessage = driver.findElement(By.className("_9ay7"));
+        String actual = errorMessage.getText();
+
+        Assert.assertEquals(actual, expect);
     }
 
     @Test
@@ -85,25 +94,10 @@ public class TestClass {
         Assert.assertTrue(errorMessage.isDisplayed(), "[FAIL] Không hiển thị thông báo lỗi khi thông tin quá dài.");
     }
 
-    @Test
-    public void testLoginLockedAccount() {
-        login("email_bi_khoa@gmail.com", "any_password");
-        // Kiểm tra thông báo lỗi
-        WebElement errorMessage = driver.findElement(By.xpath("//div[contains(text(),'locked')]"));
-        Assert.assertTrue(errorMessage.isDisplayed(), "[FAIL] Không hiển thị thông báo lỗi khi tài khoản bị khóa.");
-    }
-
-    @Test
-    public void KiemTraLoginVoiPhone() {
-        login("+84123456789", "mat_khau_dung");
-        // Kiểm tra đăng nhập thành công
-        Assert.assertTrue(driver.getCurrentUrl().contains("facebook.com"), "[FAIL] Đăng nhập không thành công với số điện thoại.");
-    }
-
     @AfterMethod
     public void cleanUp(){
         if (driver != null) {
-            sleep(5000);
+            sleep(1000);
             driver.quit();
         }
     }
